@@ -1,42 +1,28 @@
 package com.teamtreehouse.testingbase;
 
+import android.graphics.Color;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * Created by bojiejiang on 2/4/17.
  */
+@RunWith(MockitoJUnitRunner.class)
 public class MainActivityPresenterTest {
 
     MainActivityPresenter presenter;
+
+    @Mock
     MainActivityView view;
-
-    class MockedView implements MainActivityView {
-
-        String textViewTest;
-
-        @Override
-        public void changeTextViewText(String text) {
-            textViewTest = text;
-        }
-
-        @Override
-        public void changeBackgroundColor(int color) {
-
-        }
-
-        @Override
-        public void launchOtherActivity(Class activity) {
-
-        }
-    }
 
 
     @Before
     public void setUp() throws Exception {
-        view = new MockedView();
         presenter = new MainActivityPresenter(view);
     }
 
@@ -49,17 +35,32 @@ public class MainActivityPresenterTest {
         presenter.editTextUpdate(givenString);
 
         // Assert
-        assertEquals(givenString, ((MockedView) view).textViewTest);
+        Mockito.verify(view).changeTextViewText(givenString);
     }
 
     @Test
     public void colorSelected() throws Exception {
+        // Arrange
+        int index = 2;
+        int givenColor = Color.GREEN;
 
+        // Act
+        presenter.colorSelected(index);
+
+        // Assert
+        Mockito.verify(view).changeBackgroundColor(givenColor);
     }
 
     @Test
     public void launchOtherActvityButtonCliched() throws Exception {
+        // Arrange
+        Class clazz = OtherActivity.class;
 
+        // Act
+        presenter.launchOtherActvityButtonCliched(clazz);
+
+        // Assert
+        Mockito.verify(view).launchOtherActivity(clazz);
     }
 
 }
